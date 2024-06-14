@@ -3,14 +3,13 @@ package be.ucll.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -28,17 +27,20 @@ public class Stable {
     @Positive(message = "Capacity must be a positive integer")
     private int capacity;
 
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     @OneToMany
     @JoinColumn(name = "stable_id")
-    @JsonBackReference
-    private List<Animal> animals;
+    private List<Animal> animals = new ArrayList<>();
 
-    protected Stable(){ this.animals = new ArrayList<>();}
+    protected Stable(){}
 
     public Stable(String name, int capacity){
-        this.name = name;
-        this.capacity = capacity;
-        this.animals = new ArrayList<Animal>();
+        setName(name);
+        setCapacity(capacity);
+        setAnimals(new ArrayList<>());
     }
 
     public void setId(long id) {
@@ -50,8 +52,11 @@ public class Stable {
     public void setCapacity(int capacity){
         this.capacity = capacity;
     }
+    public void setAddress(Address address){
+        this.address = address;
+    }
     public void setAnimals(List<Animal> animals) {
-        this.animals = new ArrayList<Animal>();
+        this.animals = animals;
     }
     
     public long getId() {
@@ -59,6 +64,9 @@ public class Stable {
     }    
     public String getName() {
         return this.name;
+    }
+    public Address getAddress(){
+        return this.address;
     }
     public List<Animal> getAnimals() {
         return this.animals;

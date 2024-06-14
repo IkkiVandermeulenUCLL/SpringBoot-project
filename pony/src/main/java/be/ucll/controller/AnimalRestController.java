@@ -1,5 +1,6 @@
 package be.ucll.controller;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,13 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import be.ucll.model.Animal;
 import be.ucll.model.DomainException;
+import be.ucll.model.MedicalRecord;
 import be.ucll.model.Stable;
 import be.ucll.service.AnimalService;
+import be.ucll.service.MedicalRecordService;
 import be.ucll.service.ServiceException;
 import be.ucll.service.StableService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.constraints.Positive;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,13 +37,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RestController
 @RequestMapping("animals")
 public class AnimalRestController {
+    @Autowired
     private AnimalService animalService;
     private StableService stableService;
+    private MedicalRecordService medicalRecordService;
     
-    @Autowired
-    public AnimalRestController(AnimalService animalService, StableService stableService){
+    public AnimalRestController(AnimalService animalService, StableService stableService, MedicalRecordService medicalRecordService){
         this.animalService = animalService;
         this.stableService = stableService;
+        this.medicalRecordService = medicalRecordService;
     }
 
     @GetMapping
@@ -50,7 +54,7 @@ public class AnimalRestController {
     }
 
     @GetMapping("/age/{age}")
-    public List<Animal> getAnimalsOlderThan(@PathVariable @Positive(message="Age must be positive")int age) {
+    public List<Animal> getAnimalsOlderThan(@PathVariable int age) {
         return animalService.getAnimalsOlderThan(age);
     }
 
@@ -59,16 +63,35 @@ public class AnimalRestController {
         return animalService.getOldestAnimal();
     }
 
-    @PostMapping("/{animalName}/stable")
-    public Stable AddAnimalToStable(@PathVariable String animalName,@RequestBody(required = false) Stable stable,@RequestParam(required = false) Optional<Long> stableId) {
-        Animal animal = animalService.getAnimal(animalName);
-        if (stable!=null){
-            return stableService.addStable(animal, stable);
-        }
-        return stableService.addAnimal(animal, stableId);
+    @GetMapping("/stables")
+    public List<Stable> getAllStables() {
+        return stableService.getAllStables();
+    }
+
+    @GetMapping("/{animalName}/stable")
+    public Stable getStableOfAnimal(@PathVariable String animalName) {
+        return stableService.getStableOfAnimal(animalName);
     }
     
- 
+    @GetMapping("/openmedicalrecords")
+    public List<Animal> getAnimalsWithOpenMedicalRecords() {
+        return animalService.getAnimalsWithOpenMedicalRecords();
+    }
+    
+    @GetMapping("/medicalrecords/{animalName}/{date}")
+    public List<MedicalRecord> getMedicalRecordsOfAnimalAfter(@PathVariable String animalName, @PathVariable LocalDate date) {
+        return medicalRecordService.getMedicalRecordsOfAnimalAfter(animalName, date);
+    }
+    
+
+    @PostMapping("/{animalName}/stable")
+    public Stable AddAnimalToStable(@PathVariable String animalName,@RequestBody(required = false) Stable stable,@RequestParam(required = false) Optional<Long> stableId) {
+        if (stable!=null){
+            return stableService.addStable(animalName, stable);
+        }
+        return stableService.addAnimal(animalName, stableId);
+    }
+    
     @PostMapping
     public Animal addAnimal(@RequestBody Animal animal) {
         return animalService.addAnimal(animal);

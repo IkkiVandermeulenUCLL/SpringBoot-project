@@ -32,8 +32,8 @@ public class AnimalTest {
     @Test
     public void givenValidNameAndAge_whenCreatingAnimal_ThenAnimalIsCreated(){
         Animal animal = new Animal("Bella",20);
-        assert "Bella" == animal.getname();
-        assert 20 == animal.getage();
+        assert "Bella" == animal.getName();
+        assert 20 == animal.getAge();
     }
 
     @Test

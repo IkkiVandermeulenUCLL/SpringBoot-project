@@ -65,8 +65,8 @@ public class StableTest {
         Animal addedAnimal = stable.getAnimals().get(0);
         assertEquals(4, stable.getCapacity());
         assertEquals(1, stable.getAnimals().size());
-        assertEquals("Bella", addedAnimal.getname());
-        assertEquals(5, addedAnimal.getage());
+        assertEquals("Bella", addedAnimal.getName());
+        assertEquals(5, addedAnimal.getAge());
     }
 
     @Test

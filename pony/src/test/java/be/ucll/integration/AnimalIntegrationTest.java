@@ -33,32 +33,22 @@ public class AnimalIntegrationTest {
                     {
                         "id": 1,
                         "name": "Bella",
-                        "age": 20,
-                        "stable": null
+                        "age": 20
                     },
                     {
                         "id": 2,
                         "name": "Luna",
-                        "age": 10,
-                        "stable": {
-                        "id": 1,
-                        "name": "StblHn"
-                        }
+                        "age": 10
                     },
                     {
                         "id": 3,
                         "name": "Muriel",
-                        "age": 2,
-                        "stable": {
-                        "id": 2,
-                        "name": "PonyCo"
-                        }
+                        "age": 2
                     },
                     {
                         "id": 4,
                         "name": "Little",
-                        "age": 1,
-                        "stable": null
+                        "age": 1
                     }
                     ]
                 """;
@@ -80,8 +70,7 @@ public class AnimalIntegrationTest {
             {
                 "id": 1,
                 "name": "Bella",
-                "age": 20,
-                "stable": null
+                "age": 20
             }
                 """;
         client
@@ -102,17 +91,12 @@ public class AnimalIntegrationTest {
                     {
                         "id": 1,
                         "name": "Bella",
-                        "age": 20,
-                        "stable": null
+                        "age": 20
                     },
                     {
                         "id": 2,
                         "name": "Luna",
-                        "age": 10,
-                        "stable": {
-                        "id": 1,
-                        "name": "StblHn"
-                        }
+                        "age": 10
                     }
                 ]
                 """;
